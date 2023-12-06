@@ -1,0 +1,46 @@
+/* Add this CSS to your EditProject.css or another appropriate CSS file */
+
+/* Style for the form header */
+#content header {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Style for the form input and label */
+#editProjectForm {
+    max-width: 400px; /* Adjust the maximum width as needed */
+    margin: 0; /* Align to the left */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px; /* Adjust the padding as needed */
+    box-sizing: border-box;
+}
+
+
+
+
+/* Style for the form buttons */
+button {
+    background-color: yellow; /* Change the background color to yellow */
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #e6ac00; /* Change the hover color if needed */
+}

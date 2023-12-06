@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Gen | Create - Mapping List</title>
+    <link rel="stylesheet" href="../../Styles/dashboard.css">
+    <link rel="stylesheet" href="../../Styles/Projects.css">
+</head>
+<style>
+    #content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .heading {
+        color: white;
+    }
+
+    h1 {
+        color: #333;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #333;
+        color: white;
+    }
+
+    button {
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #ffd700;
+        /* Brighter yellow on hover */
+    }
+
+    select {
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        /* Light background color */
+        color: #333;
+    }
+</style>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Jumpwhere</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="../Dashboard.html" id="dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="../Employee/Employees.html">Employees</a>
+                </li>
+                <li>
+                    <a href="./ProjectList.html">Projects</a>
+                </li>
+
+                <li>
+&nbsp; Admin
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="../Admin/Coding.html">Coding</a>
+                        </li>
+                        <li>
+                            <a href="../Admin/Tools.html">Tools</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="../login.html" class="download" style="
+    margin-top: 225px;
+">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- SideBar Ends -->
+
+
+
+        <!-- Page Content  -->
+        <div id="content">
+            <header>
+                <h1 class="heading">Create - Mapping List</h1>
+            </header>
+            <br>
+
+            <form>
+                <label for="employeeDropdown">Employee Name:</label>
+                <select id="employeeDropdown"></select>
+
+                <label for="projectDropdown">Project Name:</label>
+                <select id="projectDropdown"></select>
+            </form>
+            <div>
+                <button style="background-color: #ebd452;">Save</button>
+                <button style="background-color: #868686;">Cancel</button>
+            </div>
+
+        </div>
+
+
+
+        <script>
+            // Fetch employee names and project names from Django backend and populate dropdowns
+            fetchEmployeeNames();
+            fetchProjectNames();
+
+            // JavaScript functions for button functionalities
+            function editProject(projectName) {
+                // Implement the logic to edit the project in Django backend
+                var dashboardUrl = 'MappingProjectList.html?employee=' + encodeURIComponent(employeeName);
+                window.location.href = dashboardUrl;
+            }
+
+            function deleteProject(projectName) {
+                // Implement the logic to delete the project in Django backend
+                alert('Deleting project: ' + projectName);
+            }
+
+            function fetchEmployeeNames() {
+                // Implement the logic to fetch employee names from Django backend
+                // For now, using sample data
+                var employeeDropdown = document.getElementById('employeeDropdown');
+                var employeeNames = ['John Doe', 'Jane Doe', 'Alice Smith']; // Replace with actual data
+                populateDropdown(employeeDropdown, employeeNames);
+            }
+
+            function fetchProjectNames() {
+                // Implement the logic to fetch project names from Django backend
+                // For now, using sample data
+                var projectDropdown = document.getElementById('projectDropdown');
+                var projectNames = ['Project A', 'Project B', 'Project C']; // Replace with actual data
+                populateDropdown(projectDropdown, projectNames);
+            }
+
+            function populateDropdown(dropdown, options) {
+                // Populate the given dropdown with the provided options
+                options.forEach(function (option) {
+                    var optionElement = document.createElement('option');
+                    optionElement.value = option;
+                    optionElement.textContent = option;
+                    dropdown.appendChild(optionElement);
+                });
+            }
+        </script>
+    </div>
+    <script src="../Scripts/SideBar.js"></script>
+</body>
+
+</html>

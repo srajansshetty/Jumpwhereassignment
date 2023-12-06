@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Gen | Assigned Projects List</title>
+    <link rel="stylesheet" href="../../Styles/dashboard.css">
+    <link rel="stylesheet" href="../../Styles/ProjectsList.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Jumpwhere</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="../Dashboard.html" id="dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="../Employee/Employees.html">Employees</a>
+                </li>
+                <li>
+                    <a href="../Project/ProjectList.html">Projects</a>
+                </li>
+
+                <li>
+                    &nbsp; Admin
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="../Admin/Coding.html">Coding</a>
+                        </li>
+                        <li>
+                            <a href="../Admin/Tools.html">Tools</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="../login.html" class="download" style="
+    margin-top: 225px;
+">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <header>
+                <h1>Assigned Projects List</h1>
+            </header>
+
+            <div id="dataDisplay">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Projects Mapped</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectTableBody">
+                        <!-- Table content will be dynamically populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <script>
+                function getDataInAssignedProjects() {
+                    // Define the API endpoint
+                    const apiUrl = 'http://localhost:8000/api/project/empproj';
+            
+                    // Log that the API call is being initiated
+                    console.log('Fetching data from API...');
+            
+                    // Perform a POST request using the fetch API
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        // Assuming you need to send some data in the request body, modify this object accordingly
+                        body: JSON.stringify({
+                            // Add any data needed for the POST request
+                        }),
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Log the data received from the API
+                            console.log('Data received:', data);
+            
+                            // Display the data on the screen
+                            const projectTableBody = document.getElementById('projectTableBody');
+                            projectTableBody.innerHTML = ''; // Clear existing table rows
+            
+                            if (!data.projects || data.projects.length === 0) {
+                                // Display a message if there are no assigned projects
+                                projectTableBody.innerHTML = '<tr><td colspan="3">No assigned projects found.</td></tr>';
+                            } else {
+                                data.projects.forEach((employee, rowIndex) => {
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                                        <td>${employee.name}</td>
+                                        <td>${employee.mappedproject.join(', ')}</td>
+                                        <td>
+                                            <button onclick="editAssignment('${employee.name}')">Edit</button>
+                                            <button onclick="deleteAssignment('${employee.name}')">Delete</button>
+                                        </td>
+                                    `;
+                                    projectTableBody.appendChild(row);
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            // Log any errors that occurred during the API call
+                            console.error('Error fetching data:', error);
+            
+                            // Display an error message on the UI
+                            const projectTableBody = document.getElementById('projectTableBody');
+                            projectTableBody.innerHTML = '<tr><td colspan="3">Error fetching data from the server.</td></tr>';
+                        });
+                }
+            
+                // Call the function to fetch data when the DOM is fully loaded
+                document.addEventListener('DOMContentLoaded', getDataInAssignedProjects);
+            
+                function editAssignment(name) {
+                    window.location.href = 'MappingProjectList.html';
+                    console.log(`Editing assignment for ${name}`);
+                }
+            
+                function deleteAssignment(name) {
+                    // Implement your logic for deleting an assignment
+                    console.log(`Deleting assignment for ${name}`);
+            
+                   
+                    fetch(`http://localhost:8000/api/employee/deleteassociate`, {
+                        method: 'POST',
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Assignment deleted:', data);
+                            // After successful deletion, you might want to refresh the data on the page
+                            getDataInAssignedProjects();
+                        })
+                        .catch(error => {
+                            console.error('Error deleting assignment:', error);
+                        });
+                    }
+            
+            </script>
+        </div>
+    </div>
+    <script src="../Scripts/SideBar.js"></script>
+</body>
+
+</html>

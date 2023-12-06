@@ -1,0 +1,77 @@
+body {
+    background-color: #f8f9fa;
+    margin: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 0;
+}
+
+.wrapper {
+    display: flex;
+}
+
+#content {
+
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box; /* Ensures padding is included in the width */
+}
+
+#content form {
+    max-width: 800px; /* Increase the max-width for more space on the right */
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#content .form-group {
+    margin-bottom: 15px;
+}
+
+#content label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#content textarea,
+#content select,
+#content input {
+    width: calc(100% - 20px); /* Subtract padding from width to maintain 100% width */
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f5f5f5; /* Light grey background color */
+}
+
+#content button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#content button:hover {
+    background-color: #0056b3;
+}
+
+#content button[type="button"] {
+    background-color: #6c757d;
+    margin-left: 10px;
+}
+
+#content button[type="button"]:hover {
+    background-color: #495057;
+}

@@ -1,0 +1,170 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>{{ employee.name }}'s Resume</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://jumpwhere.com/wp-content/uploads/2016/01/JW1.png");
+            background-size: cover;
+            background-position: center center;
+            color: white; /* Text color on top of the background image */
+            margin: 0; /* Remove default margin to ensure full coverage */
+            height: 100vh; /* Ensure the body covers the full height of the viewport */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 20px; /* Add padding to make the header more readable */
+            background-color: rgba(255, 255, 255, 0.7); /* Light yellow background for the header */
+            border-radius: 10px; /* Add rounded corners for a nicer look */
+            box-sizing: border-box;
+        }
+
+        .section {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* Light yellow background for sections */
+            margin: 20px;
+            border-radius: 10px; /* Add rounded corners for a nicer look */
+            max-width: 600px; /* Limit the width of the content for better readability */
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            max-width: 100%; /* Make the logo responsive to the container */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 10px; /* Add rounded corners for a nicer look */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        {{ employee.name }}
+    </div>
+
+    <div class="section">
+        <h2>Project:</h2>
+        <p>{{ employee.project }}</p>
+    </div>
+
+    <div class="section">
+        <h2>Tech Stack:</h2>
+        <ul>
+            {% for tech in employee.tech_stack %}
+                <li>{{ tech }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Description:</h2>
+        <p>{{ employee.description }}</p>
+    </div>
+
+    <div class="section">
+        <h2>Company Logo:</h2>
+        <img src="{{ employee.company_logo.url }}" alt="Company Logo" class="logo">
+    </div>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ employee.name }}'s Resume</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://jumpwhere.com/wp-content/uploads/2016/01/JW1.png");
+            background-size: cover;
+            background-position: center center;
+            color: white;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        .section {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            margin: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .separator {
+            border-top: 1px solid white;
+            margin: 20px 0;
+        }
+
+        .points {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .points li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        Jumpwhere
+    </div>
+
+    <br><br>
+
+    <div class="section">
+        <h2>Name:</h2>
+        <p>{{ employee.name }}</p>
+        <div class="separator"></div>
+
+        <h2>Description:</h2>
+        <p>{{ employee.description }}</p>
+        <div class="separator"></div>
+
+        <h2>Tech Stack:</h2>
+        <ul class="points">
+            {% for tech in employee.tech_stack %}
+                <li>{{ tech }}</li>
+            {% endfor %}
+        </ul>
+        <div class="separator"></div>
+
+        <h2>Projects Worked On:</h2>
+        <p>{{ employee.project }}</p>
+    </div>
+</body>
+
+</html>
