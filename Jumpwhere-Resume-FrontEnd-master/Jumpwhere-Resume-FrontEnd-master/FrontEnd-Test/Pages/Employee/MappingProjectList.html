@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Gen | Map Project List</title>
+    <link rel="stylesheet" href="../../Styles/dashboard.css">
+    <link rel="stylesheet" href="../../Styles/Employees.css">
+</head>
+
+<style>
+    /* Add this style to your existing stylesheet or create a new one */
+    #content {
+        text-align: center;
+        /* Center the content horizontally */
+    }
+
+    table {
+        margin: 20px auto;
+        /* Center the table horizontally */
+        font-weight: bold;
+        /* Make the text in the table bold */
+    }
+
+    label {
+        display: block;
+        /* Make labels block elements */
+        margin: 10px 0;
+        /* Add some margin to the labels for spacing */
+    }
+
+    input {
+        padding: 5px;
+        /* Add padding to the input boxes */
+    }
+
+    button {
+        margin-top: 10px;
+        /* Add margin to the button for spacing */
+    }
+</style>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Jumpwhere</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="../Dashboard.html" id="dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="../Employee/Employees.html">Employees</a>
+                </li>
+                <li>
+                    <a href="../Project/ProjectList.html">Projects</a>
+                </li>
+
+                <li>
+                    &nbsp; Admin
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="../Admin/Coding.html">Coding</a>
+                        </li>
+                        <li>
+                            <a href="../Admin/Tools.html">Tools</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="../login.html" class="download" style="
+    margin-top: 225px;
+">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <header>
+                <h1>Map Project List</h1>
+            </header>
+
+            <div>
+                <label for="employeeName">Employee Name:</label>
+                <input type="text" id="employeeName" placeholder="Enter employee name">
+            </div>
+
+            <div>
+                <label for="projectName">Project:</label>
+                <input type="text" id="projectName" placeholder="Enter project name">
+            </div>
+
+            <button onclick="mapProject()">Map</button>
+        </div>
+
+        <script>
+            function mapProject() {
+                const employeeName = document.getElementById('employeeName').value;
+                const projectName = document.getElementById('projectName').value;
+
+                if (employeeName && projectName) {
+                    // Call the mapping API
+                    const apiUrl = 'http://localhost:8000/api/employee/associate';
+                    const requestData = {
+                        ename: employeeName, // Change the key to "ename"
+                        pname: projectName,  // Change the key to "pname"
+                    };
+
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData),
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Handle the response as needed
+                            console.log('Mapping success:', data);
+                        })
+                        .catch(error => {
+                            // Handle errors
+                            console.error('Mapping error:', error);
+                        });
+                } else {
+                    alert('Please enter both employee name and project.');
+                }
+            }
+        </script>
+    </div>
+    <script src="../Scripts/SideBar.js"></script>
+</body>
+
+</html>

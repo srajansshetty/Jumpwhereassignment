@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Gen | ProjectsList</title>
+    <link rel="stylesheet" href="../../Styles/dashboard.css">
+    <link rel="stylesheet" href="../../Styles/ProjectsList.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Jumpwhere</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="../Dashboard.html" id="dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="../Employee/Employees.html">Employees</a>
+                </li>
+                <li>
+                    <a href="../Project/ProjectList.html">Projects</a>
+                </li>
+
+                <li>
+                    &nbsp; Admin
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="../Admin/Coding.html">Coding</a>
+                        </li>
+                        <li>
+                            <a href="../Admin/Tools.html">Tools</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="../login.html" class="download" style="
+    margin-top: 225px;
+">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <header>
+                <h1>Project List Page</h1>
+                <button onclick="window.location.href='Projects.html'">Create</button>
+            </header>
+
+            <div id="dataDisplay">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Technology Used</th>
+                            <th>Description</th>
+                            <th>Roles</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectTableBody">
+                        <!-- Table content will be dynamically populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Navigation -->
+            <div class="pagination">
+                <a href="#">&laquo;</a>
+                <a href="#">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <a href="#">&raquo;</a>
+            </div>
+
+            <script>
+
+                let currentPage = 1;
+                const projectsPerPage = 10;
+
+                function getDataInProjects() {
+                    // Define the API endpoint
+                    const apiUrl = 'http://localhost:8000/api/project/prjlist';
+
+                    // Log that the API call is being initiated
+                    console.log('Fetching data from API...');
+
+                    // Perform a POST request using the fetch API
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Log the data received from the API
+                            console.log('Data received:', data);
+
+                            // Display the data on the screen
+                            const projectTableBody = document.getElementById('projectTableBody');
+                            projectTableBody.innerHTML = ''; // Clear existing table rows
+
+                            if (data.projects.length === 0) {
+                                // Display a message if there are no projects
+                                projectTableBody.innerHTML = '<tr><td colspan="6">No projects found.</td></tr>';
+                            } else {
+                                // Calculate the start and end indices for the current page
+                                const startIndex = (currentPage - 1) * projectsPerPage;
+                                const endIndex = startIndex + projectsPerPage;
+
+                                data.projects.slice(startIndex, endIndex).forEach((project, rowIndex) => {
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                            <td>${startIndex + rowIndex + 1}</td>
+                            <td>${project.name}</td>
+                            <td>${extractTechnologyNames(project.technology_used)}</td>
+                            <td>${project.description}</td>
+                            <td>${project.roles}</td>
+                            <td>
+                                <button onclick="editProject('${project.name}')">Edit</button>
+                                <button onclick="deleteProject('${project.name}')">Delete</button>
+                            </td>
+                        `;
+                                    projectTableBody.appendChild(row);
+                                });
+
+                                // Display pagination links
+                                displayPaginationLinks(data.projects.length);
+                            }
+                        })
+                        .catch(error => {
+                            // Log any errors that occurred during the API call
+                            console.error('Error fetching data:', error);
+
+                            // Display an error message on the UI
+                            const projectTableBody = document.getElementById('projectTableBody');
+                            projectTableBody.innerHTML = '<tr><td colspan="6">Error fetching data from the server.</td></tr>';
+                        });
+                }
+
+                function extractTechnologyNames(techNames) {
+                    try {
+                        // Use a regular expression to extract technology names
+                        const extractedNames = techNames.match(/[a-zA-Z0-9]+/g);
+
+                        // Check if extractedNames is an array
+                        if (Array.isArray(extractedNames)) {
+                            return extractedNames.join(', ');
+                        }
+                    } catch (error) {
+                        // If extraction fails or the result is not an array, return the original string
+                        return techNames;
+                    }
+                }
+
+                function displayPaginationLinks(totalProjects) {
+                    // Calculate the total number of pages
+                    const totalPages = Math.ceil(totalProjects / projectsPerPage);
+
+                    // Get the pagination element
+                    const paginationElement = document.querySelector('.pagination');
+
+                    // Clear existing pagination links
+                    paginationElement.innerHTML = '';
+
+                    // Create and append pagination links
+                    for (let page = 1; page <= totalPages; page++) {
+                        const link = document.createElement('a');
+                        link.href = '#';
+                        link.textContent = page;
+                        link.addEventListener('click', () => {
+                            // Set the current page and fetch data for the selected page
+                            currentPage = page;
+                            getDataInProjects();
+                        });
+                        paginationElement.appendChild(link);
+                    }
+                }
+
+                // Call the function to fetch data when the DOM is fully loaded
+                document.addEventListener('DOMContentLoaded', getDataInProjects);
+
+                function deleteProject(projectName) {
+                    const confirmation = confirm(`Are you sure you want to delete the project '${projectName}'?`);
+                    if (confirmation) {
+                        // Perform a POST request to delete the project
+                        fetch('http://localhost:8000/api/project/delete', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                name: projectName,
+                            }),
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                // Log the success message
+                                console.log('Project deleted successfully:', data.message);
+
+                                // After deletion, fetch and display the updated data
+                                getDataInProjects();
+                            })
+                            .catch(error => {
+                                // Log any errors that occurred during the deletion
+                                console.error('Error deleting project:', error);
+                            });
+                    }
+                }
+
+                function editProject(projectName) {
+                    // Implement the logic to edit the project in Django backend
+                    var dashboardUrl = 'EditProject.html?employee=' + encodeURIComponent(projectName);
+                    window.location.href = dashboardUrl;
+                }
+
+
+
+            </script>
+        </div>
+    </div>
+    <script src="../Scripts/SideBar.js"></script>
+</body>
+
+</html>

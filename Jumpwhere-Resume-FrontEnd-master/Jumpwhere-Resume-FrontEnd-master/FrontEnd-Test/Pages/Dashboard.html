@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Gen | Dashboard</title>
+    <link rel="stylesheet" href="../Styles/dashboard.css">
+    <link rel="stylesheet" href="../Styles/Dash.css">
+</head>
+
+<style>
+    #totalCodingLanguages {
+        color: rgb(234, 125, 125);
+    }
+
+    #totemployee {
+        background-color: rgba(4, 122, 248, 0.597);
+    }
+
+    #totempproj {
+        background-color: rgba(155, 15, 45, 0.451);
+    }
+
+    #totcode {
+        background-color: rgba(9, 214, 22, 0.589);
+    }
+
+    #tottool {
+        background-color: rgba(254, 9, 9, 0.705);
+    }
+</style>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Jumpwhere</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="./Dashboard.html" id="dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="./Employee/Employees.html">Employees</a>
+                </li>
+                <li>
+                    <a href="./Project/Projects.html">Projects</a>
+                </li>
+
+                <li>
+                    &nbsp; Admin
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="./Admin/Coding.html">Coding</a>
+                        </li>
+                        <li>
+                            <a href="./Admin/Tools.html">Tools</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="../Pages/login.html" class="download" style="
+    margin-top: 225px;
+">Logout</a></li>
+
+            </ul>
+        </nav>
+
+
+
+        <!-- Page Content  -->
+        <div id="content">
+            <header>
+                <h1>Dashboard Page</h1>
+
+            </header>
+            <div class="line"></div>
+
+            <div class="dashboard-box" id="totemployee">
+                <h3>Total Employees</h3>
+                <p class="value" id="employeeCount">Loading...</p>
+            </div>
+
+            <div class="dashboard-box" id="totempproj">
+                <h3>Total Projects</h3>
+                <p class="value" id="projectsCount">Loading...</p>
+            </div>
+
+            <div class="dashboard-box" id="totcode">
+                <h3>Total Coding Languages</h3>
+                <p class="value" id="codingCount">Loading...</p>
+            </div>
+
+            <div class="dashboard-box" id="tottool">
+                <h3>Total Tools</h3>
+                <p class="value" id="toolsCount">Loading...</p>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            try {
+                console.log('Fetching data...');
+                // Fetch data from the API endpoint using a POST request
+                const response = await fetch('http://localhost:8000/api/codingtools/countall', {
+                    method: 'POST', // Use the POST method
+                });
+                console.log('Response:', response);
+                const data = await response.json();
+                console.log('Data received:', data);
+
+                // Update the content of each container
+                document.getElementById('codingCount').textContent = `Count: ${data.codingcount}`;
+                document.getElementById('toolsCount').textContent = `Count: ${data.toolscount}`;
+                document.getElementById('projectsCount').textContent = `Count: ${data.projectscount}`;
+                document.getElementById('employeeCount').textContent = `Count: ${data.employeecount}`;
+            } catch (error) {
+                console.error('Error:', error);
+                // Handle the error as needed
+            }
+        }
+        // Call the async function
+        fetchData();
+    </script>
+
+    <script src="../Scripts/SideBar.js"></script>
+
+</body>
+
+</html>

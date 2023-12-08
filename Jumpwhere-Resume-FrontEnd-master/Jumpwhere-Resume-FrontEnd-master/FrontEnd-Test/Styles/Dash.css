@@ -1,0 +1,54 @@
+/* Add this to your styles.css file or your HTML head */
+#content {
+    padding: 20px;
+}
+
+.line {
+    border-top: 2px solid #ddd;
+    margin-top: 10px;
+}
+
+/* Styling for the dashboard boxes */
+.dashboard-box {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+    margin-right: 5px;
+    display: inline-block;
+    width: calc(25% - 10px); /* Adjust the width as needed */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.dashboard-box h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.dashboard-box .value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #555;
+}
+
+
+#content {
+    padding: 20px;
+    /* display: flex; */
+    flex-wrap: wrap;
+}
+
+.dashboard-box {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-right: 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    width: calc(25% - 10px);
+    margin-top: 0; /* Remove the top margin */
+}
+
+

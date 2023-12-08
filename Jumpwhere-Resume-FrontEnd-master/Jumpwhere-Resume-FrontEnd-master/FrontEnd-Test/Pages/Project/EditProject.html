@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Gen | Projects</title>
+    <link rel="stylesheet" href="../../Styles/dashboard.css">
+    <link rel="stylesheet" href="../../Styles/Projects.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Jumpwhere</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="../Dashboard.html" id="dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="../Employee/Employees.html">Employees</a>
+                </li>
+                <li>
+                    <a href="./ProjectList.html">Projects</a>
+                </li>
+
+                <li>
+                    &nbsp; Admin
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="../Admin/Coding.html">Coding</a>
+                        </li>
+                        <li>
+                            <a href="../Admin/Tools.html">Tools</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="../login.html" class="download" style="
+    margin-top: 225px;
+">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <header>
+                <h1>Project Edit</h1>
+            </header>
+
+            <form id="projectForm">
+                <div class="form-group">
+                    <label for="projectName"> Name</label>
+                    <textarea id="projectName" class="form-control"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="technology">Technology Used</label>
+                    <select id="technology" class="form-control" multiple>
+                        <!-- Technology options will be populated dynamically -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="rolesResponsibilities">Roles and Responsibilities</label>
+                    <textarea id="rolesResponsibilities" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" onclick="submitForm(event)">Update</button>
+                    <button type="button" onclick="window.location.href='ProjectList.html'">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            // Fetch technology options from Django backend API
+            fetchTechnologyOptions();
+
+            function populateDropdown(dropdown, options) {
+                // Clear existing options
+                dropdown.innerHTML = '';
+
+                // Populate the dropdown with the provided options
+                options.forEach(function (option) {
+                    var optionElement = document.createElement('option');
+                    optionElement.value = option;
+                    optionElement.textContent = option;
+                    dropdown.appendChild(optionElement);
+                });
+            }
+
+            function fetchTechnologyOptions() {
+                var technologyDropdown = document.getElementById('technology');
+
+                fetch('http://localhost:8000/api/codingtools/list', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ type: 'coding' }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        var technologyOptions = data.projects.map(project => project.name);
+                        populateDropdown(technologyDropdown, technologyOptions);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+            }
+
+            function submitForm(event) {
+                // Prevent the default form submission
+                event.preventDefault();
+
+                // Get form data
+                var projectName = document.getElementById('projectName').value;
+                var technologyUsed = Array.from(document.getElementById('technology').selectedOptions).map(option => option.value);
+                var description = document.getElementById('description').value;
+                var rolesResponsibilities = document.getElementById('rolesResponsibilities').value;
+
+                // Create JSON object
+                var formData = {
+                    "name": projectName,
+                    "technology_used": technologyUsed,
+                    "description": description,
+                    "roles": rolesResponsibilities
+                };
+
+                // Perform POST request to Django backend
+                fetch('http://localhost:8000/api/project/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Handle the response as needed
+                        console.log('Success:', data);
+                        // Redirect to the project list page
+                        window.location.href = 'ProjectList.html';
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Handle the error as needed
+                    });
+            }
+         
+
+        </script>
+
+    </div>
+    <script src="../Scripts/SideBar.js"></script>
+</body>
+
+</html>

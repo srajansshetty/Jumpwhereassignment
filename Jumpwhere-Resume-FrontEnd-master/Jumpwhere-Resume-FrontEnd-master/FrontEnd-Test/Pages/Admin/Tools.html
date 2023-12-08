@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Gen | ProjectsList</title>
+    <link rel="stylesheet" href="../../Styles/dashboard.css">
+    <link rel="stylesheet" href="../../Styles/ProjectsList.css">
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Jumpwhere</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="../Dashboard.html" id="dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="../Employee/Employees.html">Employees</a>
+                </li>
+                <li>
+                    <a href="../Project/ProjectList.html">Projects</a>
+                </li>
+
+                <li>
+                    &nbsp; Admin
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="../Admin/Coding.html">Coding</a>
+                        </li>
+                        <li>
+                            <a href="../Admin/Tools.html">Tools</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="../login.html" class="download" style="
+    margin-top: 225px;
+">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <header>
+                <h1>Tech Stack List Page</h1>
+                <button onclick="window.location.href='ToolsList.html'">Create</button>
+            </header>
+
+            <div id="dataDisplay">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="codingToolsTableBody">
+                        <!-- Table content will be dynamically populated by JavaScript -->
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- Pagination Navigation
+            <div class="pagination">
+                <a href="#">&laquo;</a>
+                <a href="#">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <a href="#">&raquo;</a>
+            </div> -->
+
+            <script>
+                function getDataInCoding() {
+                    // Define the API endpoint
+                    const apiUrl = 'http://localhost:8000/api/codingtools/toolslist';
+
+                    // Perform a POST request using the fetch API
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ type: 'tools' }),
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Display the data on the screen
+                            const codingToolsTableBody = document.getElementById('codingToolsTableBody');
+                            codingToolsTableBody.innerHTML = ''; // Clear existing table rows
+
+                            // Iterate through the projects and create table rows
+                            data.projects.forEach((project, rowIndex) => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                        <td>${rowIndex + 1}</td>
+                        <td>${project.name}</td>
+                        <td>
+                            <button onclick="editProject(${rowIndex + 1})">Edit</button>
+                            <button onclick="deleteProject(${rowIndex + 1}, '${project.name}')">Delete</button>
+                        </td>
+                    `;
+                                codingToolsTableBody.appendChild(row);
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
+                        });
+                }
+
+                // function editProject(rowId) {
+                //     // Implement the logic to edit the project (if needed)
+                //     alert(`Editing project with ID ${rowId}`);
+                // }
+
+                function deleteProject(rowId, projectName) {
+                    const confirmation = confirm(`Are you sure you want to delete ${projectName}?`);
+                    if (confirmation) {
+                        // Make API call to delete the project
+                        fetch('http://localhost:8000/api/codingtools/delete', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ name: projectName }),
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                // Handle the success response as needed
+                                alert(`Project deleted successfully: ${projectName}`);
+                                // Refresh the data after deletion
+                                getDataInCoding();
+                            })
+                            .catch(error => {
+                                console.error('Error deleting project:', error);
+                            });
+                    }
+                }
+
+                function editProject(projectName) {
+                    // Redirect to the edit project page with the project name
+                    window.location.href = `EditToolsStack.html?projectName=${encodeURIComponent(projectName)}`;
+                }
+
+
+
+                // Call the function to fetch data when the DOM is fully loaded
+                document.addEventListener('DOMContentLoaded', getDataInCoding);
+            </script>
+        </div>
+    </div>
+    <script src="../Scripts/SideBar.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Gen | Edit Project</title>
+    <link rel="stylesheet" href="../../Styles/dashboard.css">
+    <link rel="stylesheet" href="../../Styles/ProjectsList.css">
+    <link rel="stylesheet" href="../../Styles/CodingList.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Jumpwhere</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="../Dashboard.html" id="dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="../Employee/Employees.html">Employees</a>
+                </li>
+                <li>
+                    <a href="./ProjectList.html">Projects</a>
+                </li>
+
+                <li>
+                    &nbsp; Admin
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="../Admin/Coding.html">Coding</a>
+                        </li>
+                        <li>
+                            <a href="../Admin/Tools.html">Tools</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="../login.html" class="download" style="
+    margin-top: 225px;
+">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <header>
+                <h1>Coding Create Page</h1>
+            </header>
+
+            <form id="editProjectForm">
+                <div class="form-group">
+                    <label for="projectName">Name</label>
+                    <input type="text" id="projectName" placeholder="Enter project name" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" onclick="saveProject()">Save</button>
+                    <button type="button" onclick="cancelEdit()">Cancel</button>
+                </div>
+            </form>
+
+            
+
+            <script>
+                function saveProject() {
+                    var projectName = document.getElementById('projectName').value;
+
+
+                    if (!projectName) {
+                        alert('Project Name is required.');
+                        return;
+                    }
+
+                    var data = {
+                        type: 'coding',
+                        name: projectName
+
+                    };
+
+
+                    fetch('http://localhost:8000/api/codingtools/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+
+                        });
+                }
+
+
+                function cancelEdit() {
+                    // Implement the logic to handle cancellation, e.g., navigate back to the ProjectsList page
+                    window.location.href = 'Coding.html';
+                }
+            </script>
+        </div>
+    </div>
+    <script src="../Scripts/SideBar.js"></script>
+</body>
+
+</html>

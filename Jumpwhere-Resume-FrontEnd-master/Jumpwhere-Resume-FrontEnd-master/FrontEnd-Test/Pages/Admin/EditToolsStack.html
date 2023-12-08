@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Gen | Edit Tech Stack</title>
+    <link rel="stylesheet" href="../../Styles/dashboard.css">
+    <link rel="stylesheet" href="../../Styles/ProjectsList.css">
+    <link rel="stylesheet" href="../../Styles/CodingList.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Jumpwhere</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="../Dashboard.html" id="dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a href="../Employee/Employees.html">Employees</a>
+                </li>
+                <li>
+                    <a href="./ProjectList.html">Projects</a>
+                </li>
+
+                <li>
+                    &nbsp; Admin
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="../Admin/Coding.html">Coding</a>
+                        </li>
+                        <li>
+                            <a href="../Admin/Tools.html">Tools</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="../login.html" class="download" style="
+    margin-top: 225px;
+">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <header>
+                <h1>Edit Tools Page</h1>
+            </header>
+
+            <form id="editProjectForm">
+                <div class="form-group">
+                    <label for="existingProjectName">Existing Name</label>
+                    <input type="text" id="existingProjectName" placeholder="Enter the existing project name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectName">New Name</label>
+                    <!-- Use the name as the placeholder -->
+                    <input type="text" id="projectName" placeholder="Enter new project name" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" onclick="saveTechStack()">Update</button>
+                    <button type="button" onclick="cancelEdit()">Cancel</button>
+                </div>
+            </form>
+
+            <script>
+                function getProjectNamesFromURL() {
+                    var urlParams = new URLSearchParams(window.location.search);
+                    return {
+                        existingName: urlParams.get('name') || '',
+                        newName: urlParams.get('newname') || ''
+                    };
+                }
+
+                function setProjectNames() {
+                    var existingProjectNameInput = document.getElementById('existingProjectName');
+                    var projectNameInput = document.getElementById('projectName');
+                    var projectNames = getProjectNamesFromURL();
+
+                    existingProjectNameInput.value = projectNames.existingName; // Set the existing name
+                    projectNameInput.value = projectNames.newName; // Set the new name
+                }
+
+                setProjectNames();
+
+                function saveTechStack() {
+                    var existingProjectName = document.getElementById('existingProjectName').value;
+                    var updatedProjectName = document.getElementById('projectName').value;
+
+                    // Check if the user entered a new name
+                    if (updatedProjectName !== '') {
+                        // Make an API call to update the coding tool
+                        fetch('http://localhost:8000/api/codingtools/update', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                name: existingProjectName,
+                                newname: updatedProjectName,
+                                type: 'tools',  // Replace with the actual type if needed
+                            }),
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                alert('Tech stack updated successfully: ' + updatedProjectName);
+                                // Redirect to the CodingList page after updating
+                                window.location.href = 'Tools.html';
+                            })
+                            .catch(error => {
+                                console.error('Error updating tech stack:', error);
+                            });
+                    } else {
+                        alert('Please enter a new project name.');
+                    }
+                }
+
+                function cancelEdit() {
+                    // Navigate back to the CodingList page
+                    window.location.href = 'Coding.html';
+                }
+
+                function getProjectNameFromURL() {
+                    var urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get('name') || '';
+                }
+
+                // Function to set the project name in the input field
+                function setProjectName() {
+                    var projectNameInput = document.getElementById('projectName');
+                    projectNameInput.value = getProjectNameFromURL();
+                }
+
+                // Call the setProjectName function on page load to pre-fill the input field
+                setProjectName();
+            </script>
+        </div>
+    </div>
+    <script src="../Scripts/SideBar.js"></script>
+</body>
+
+</html>
